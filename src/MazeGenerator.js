@@ -5,16 +5,14 @@ export class MazeGenerator {
 	#mapRef;
 	#rooms = [];
 
-	get rooms() { return this.#rooms; }
-
 	constructor(rundomGenerator, map) {
 		this.#mapRef = map;
 		this.#rand = rundomGenerator;
 	}
 
-	createRooms(count) {
-		console.log(`creating ${count} rooms`);
-		const maxAttempts = count * 10;
+	createRooms(roomCount) {
+		console.log(`creating ${roomCount} rooms`);
+		const maxAttempts = roomCount * 10;
 
 		const minRoomSize = 3;
 		const maxRoomSize = 8;
@@ -36,7 +34,7 @@ export class MazeGenerator {
 			);
 		};
 
-		while (this.#rooms.length < count && attempt < maxAttempts) {
+		while (this.#rooms.length < roomCount && attempt < maxAttempts) {
 			let rw = this.getRundomIntFrom(minRoomSize, maxRoomSize);
 			let rh = this.getRundomIntFrom(minRoomSize, maxRoomSize);
 			let rx = this.getRundomIntFrom(roomStartIdx, mapWidth - rw - roomBoundaryOffset);
@@ -50,28 +48,83 @@ export class MazeGenerator {
 			attempt++;
 		}
 
-		// change tile tipe to standart for every tile that's inside a room
-		let sum = 0;
+		// change tile type to standart for every tile that's inside a room
 		for (const room of this.#rooms) {
-			let modified = 0;
 			for (let i = room.x; i < room.x + room.w; i++) {
 				for (let j = room.y; j < room.y + room.h; j++) {
 					this.#mapRef[i][j].type = Tile.types.empty;
-					modified++;
 				}
 			}
-			console.log(`Modified ${modified}`);
-			console.table(room);
-			sum += modified;
 		}
-		console.log(`Modified sum = ${sum}`);
+
+		// connecting rooms
+		this.#connectRooms();
 
 		console.log(`[Attempts:${attempt}/${maxAttempts}]. New rooms have been created! rooms = ${this.#rooms}`);
-		// console.table(this.#rooms);
 	}
 
-	placePaths(count) {
+	#connectRooms() {
+		const diractions = [[0, -1], [1, 0], [0, 1], [-1, 0]];
 
+		let stack = [];
+		let [sx, sy] = this.#rooms[0].center();
+		stack.push([sx, sy, null]);
+
+		while (stack.length > 0) {
+			let [x, y, prevDir] = stack[stack.length - 1];
+			diractions.sort(() => this.#rand() - 0.5);
+
+			if (prevDir) {
+				diractions.sort((a, _) => {
+					(a[0] === prevDir[0] && a[1] === prevDir[1]) ? -1 : 1
+				});
+			}
+
+			let validDirs = diractions.filter(([dx, dy]) => {
+				let nx = x + dx * 2;
+				let ny = y + dy * 2;
+				return this.#isInside(nx, ny) && this.#mapRef[nx][ny]?.type == Tile.types.wall;
+			});
+
+			if (validDirs.length > 0) {
+				let [dx, dy] = validDirs[0];
+				let nx = x + dx * 2;
+				let ny = y + dy * 2;
+
+				this.#mapRef[x + dx][y + dy].type = Tile.types.empty;
+				this.#mapRef[nx][ny].type = Tile.types.empty;
+
+				stack.push([nx, ny, [dx, dy]]);
+			} else {
+				stack.pop();
+			}
+		}
+
+		this.#rooms.sort(() => this.#rand() - 0.5);
+		for (let i = 0; i < this.#rooms.length - 1; i++) {
+			this.#carveCorridor(this.#rooms[i], this.#rooms[i + 1])
+		}
+	}
+
+	#carveCorridor(roomA, roomB) {
+		console.log(roomA);
+		console.log(roomB);
+		let [x1, y1] = roomA.pos();
+		let [x2, y2] = roomB.pos();
+
+		for (let x = Math.min(x1, x2); x <= Math.max(x1, x2); x++) {
+			this.#mapRef[x][y1].type = Tile.types.empty;
+		}
+		for (let y = Math.min(y1, y2); y <= Math.max(y1, y2); y++) {
+			this.#mapRef[x2][y].type = Tile.types.empty;
+		}
+	}
+
+	#isInside(x, y) {
+		return x > 0 && y > 0 && y < this.#mapRef.length - 1 && x < this.#mapRef[0].length - 1;
+	}
+
+	placePaths(exitCount) {
 	}
 
 	getRundomIntFrom(min, max) {
@@ -80,14 +133,21 @@ export class MazeGenerator {
 }
 
 export class Room {
-	get pos() { return [this.x, this.y]; }
-	get size() { return [this.w, this.h]; }
+	pos() { return [this.x, this.y]; }
+	size() { return [this.w, this.h]; }
 
 	constructor(x, y, w, h) {
 		this.x = x;
 		this.y = y
 		this.w = w;
 		this.h = h;
+	}
+
+	center() {
+		return [
+			Math.floor(this.x + this.w / 2),
+			Math.floor(this.y + this.h / 2)
+		];
 	}
 
 	isInside(x, y) {

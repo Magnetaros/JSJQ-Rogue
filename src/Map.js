@@ -1,5 +1,5 @@
 import { Tile } from "./Tile.js"
-import { MazeGenerator, Room } from "./MazeGenerator.js";
+import { MazeGenerator } from "./MazeGenerator.js";
 
 export class Map {
 	isUpdating = false;
@@ -58,6 +58,7 @@ export class Map {
 		};
 	}
 
+	// TODO: create Level instance and store it someware
 	redraw() {
 		this.#generateMap();
 
