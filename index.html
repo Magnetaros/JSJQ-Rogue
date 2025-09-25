@@ -23,11 +23,11 @@
 		</div>
 
 		<script type="module">
-		import { Game } from "./index.js"
+			import { Game } from "./index.js"
 
-			var game=new Game();
+			var game = new Game();
 			game.init();
-			setInterval(game.Update, 1000);
+			setInterval(game.Update.bind(game), 1000);
 		</script>
 	</body>
 </html>

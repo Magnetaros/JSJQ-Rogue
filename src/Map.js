@@ -1,16 +1,23 @@
 import { Tile } from "./Tile.js"
+import { MazeGenerator, Room } from "./MazeGenerator.js";
 
 export class Map {
 	isUpdating = false;
 	#map;
 	#mapWidth = 40;
 	#mapHeight = 24;
+	#mapGenerator;
+
+	get map() { return this.#map; }
 
 	constructor() {
-		this.#map = Array.from(
-			{ length: this.#mapWidth },
-			() => new Array(this.#mapHeight).fill(new Tile())
-		);
+		this.#map = [this.#mapWidth];
+		for (let i = 0; i < this.#mapWidth; i++) {
+			this.#map[i] = [this.#mapHeight];
+			for (let j = 0; j < this.#mapHeight; j++) {
+				this.#map[i][j] = new Tile();
+			}
+		}
 
 		$(document).ready(this.redraw());
 	}
@@ -19,19 +26,27 @@ export class Map {
 		console.log(this.#map)
 	}
 
+	/* TODO:
+	 *  add new module "LEVEL" - stores level data/ load, unload, save/ enemy, items, poutions count and their positions
+	 *	set new seed - and save it in stack or queue to move between them
+	 *	when moving between rooms previous room is saving inside hash or storage (if progression is intended)
+	 *	generate map
+	 *	connect logic with path finding
+	 *
+	 *
+	 *	NOTE: 
+	 *	rooms: 5 - 10
+	 *	room-size: (3-8) width/height
+	 * */
 	#generateMap() {
-		/* TODO:
-		 *  add new module "LEVEL" - stores level data/ load, unload, save/ enemy, items, poutions count and their positions
-		 *	set new seed - and save it in stack or queue to move between them
-		 *	when moving between rooms previous room is saving inside hash or storage (if progression is intended)
-		 *	generate map
-		 *	connect logic with path finding
-		 *
-		 *
-		 *	NOTE: 
-		 *	rooms: 5 - 10
-		 *	room-size: (3-8) width/height
-		 * */
+		this.isUpdating = true
+		const seed = new Date().getTime();
+		const rand = this.#rundom(seed);
+
+		this.#mapGenerator = new MazeGenerator(rand, this.#map);
+		this.#mapGenerator.createRooms(this.#mapGenerator.getRundomIntFrom(5, 10));
+
+		this.isUpdating = false
 	}
 
 	// NOTE: копия кода Linear Congruential Generator (LCG)
@@ -73,7 +88,23 @@ export class Map {
 		return 2140;
 	}
 
-	// WARN: maybe delete? no usable code found
 	render() {
+		const width = this.map.length;
+		const height = this.map[0].length;
+
+		let sum = 0;
+		for (let i = 0; i < width; i++) {
+			for (let j = 0; j < height; j++) {
+				const tile = this.map[i][j];
+				if (tile.element == null || tile.element == undefined) continue;
+
+				tile.element.removeClass();
+				tile.element.addClass(tile.type);
+
+				if (tile.type === Tile.types.empty) sum++;
+			}
+		}
+
+		// console.log(`Rendered as eempty ${sum} tiles!`);
 	}
 }

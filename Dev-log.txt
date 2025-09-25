@@ -9,3 +9,7 @@ Day 1:
 
 	NOTE:
 		- Use Jquery add / remove Class for modifying tile
+
+Day 2:
+	- Maze generation
+	- Pathfinding

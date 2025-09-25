@@ -36,7 +36,6 @@ h1 {
 	background-size: 100%; 
 	background-image: url(images/tile-.png); 
 	z-index: 5; 
-	margin: 10px;
 }
 
 .field .tileW { 
