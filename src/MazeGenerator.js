@@ -70,6 +70,10 @@ export class MazeGenerator {
 		let [sx, sy] = this.#rooms[0].center();
 		stack.push([sx, sy, null]);
 
+		const isInside = (x, y) => {
+			return x > 0 && y > 0 && y < this.#mapRef.length - 1 && x < this.#mapRef[0].length - 1;
+		}
+
 		while (stack.length > 0) {
 			let [x, y, prevDir] = stack[stack.length - 1];
 			diractions.sort(() => this.#rand() - 0.5);
@@ -83,7 +87,7 @@ export class MazeGenerator {
 			let validDirs = diractions.filter(([dx, dy]) => {
 				let nx = x + dx * 2;
 				let ny = y + dy * 2;
-				return this.#isInside(nx, ny) && this.#mapRef[nx][ny]?.type == Tile.types.wall;
+				return isInside(nx, ny) && this.#mapRef[nx][ny]?.type == Tile.types.wall;
 			});
 
 			if (validDirs.length > 0) {
@@ -120,11 +124,31 @@ export class MazeGenerator {
 		}
 	}
 
-	#isInside(x, y) {
-		return x > 0 && y > 0 && y < this.#mapRef.length - 1 && x < this.#mapRef[0].length - 1;
-	}
+	placePaths() {
+		const digTunnel = (from, dir) => {
+			console.log(from, dir);
+			let [x, y] = [from.x, from.y];
 
-	placePaths(exitCount) {
+			while (x < this.#mapRef.length && y < this.#mapRef[0].length) {
+				this.#mapRef[x][y].type = Tile.types.empty;
+				x = x + dir.x;
+				y = y + dir.y;
+			}
+		};
+
+		let verticals = [...Array(this.#mapRef.length).keys()]
+			.sort(() => this.#rand() - 0.5).slice(0, this.getRundomIntFrom(3, 5));
+
+		for (const x of verticals) {
+			digTunnel({ x: x, y: 0 }, { x: 0, y: 1 });
+		}
+
+		let horizontals = [...Array(this.#mapRef[0].length).keys()]
+			.sort(() => this.#rand() - 0.5).slice(0, this.getRundomIntFrom(3, 5));
+
+		for (const y of horizontals) {
+			digTunnel({ x: 0, y: y }, { x: 1, y: 0 });
+		}
 	}
 
 	getRundomIntFrom(min, max) {

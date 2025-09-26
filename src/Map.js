@@ -45,6 +45,7 @@ export class Map {
 
 		this.#mapGenerator = new MazeGenerator(rand, this.#map);
 		this.#mapGenerator.createRooms(this.#mapGenerator.getRundomIntFrom(5, 10));
+		this.#mapGenerator.placePaths();
 
 		this.isUpdating = false
 	}
