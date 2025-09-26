@@ -60,7 +60,7 @@ export class MazeGenerator {
 		// connecting rooms
 		this.#connectRooms();
 
-		console.log(`[Attempts:${attempt}/${maxAttempts}]. New rooms have been created! rooms = ${this.#rooms}`);
+		console.log(`[Attempts:${attempt}/${maxAttempts}].`);
 	}
 
 	#connectRooms() {
@@ -105,14 +105,12 @@ export class MazeGenerator {
 		}
 
 		this.#rooms.sort(() => this.#rand() - 0.5);
-		for (let i = 0; i < this.#rooms.length - 1; i++) {
-			this.#carveCorridor(this.#rooms[i], this.#rooms[i + 1])
+		for (let i = 1; i < this.#rooms.length; i++) {
+			this.#carveCorridor(this.#rooms[0], this.#rooms[i])
 		}
 	}
 
 	#carveCorridor(roomA, roomB) {
-		console.log(roomA);
-		console.log(roomB);
 		let [x1, y1] = roomA.pos();
 		let [x2, y2] = roomB.pos();
 
@@ -126,7 +124,6 @@ export class MazeGenerator {
 
 	placePaths() {
 		const digTunnel = (from, dir) => {
-			console.log(from, dir);
 			let [x, y] = [from.x, from.y];
 
 			while (x < this.#mapRef.length && y < this.#mapRef[0].length) {

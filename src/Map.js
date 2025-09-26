@@ -30,13 +30,6 @@ export class Map {
 	 *  add new module "LEVEL" - stores level data/ load, unload, save/ enemy, items, poutions count and their positions
 	 *	set new seed - and save it in stack or queue to move between them
 	 *	when moving between rooms previous room is saving inside hash or storage (if progression is intended)
-	 *	generate map
-	 *	connect logic with path finding
-	 *
-	 *
-	 *	NOTE: 
-	 *	rooms: 5 - 10
-	 *	room-size: (3-8) width/height
 	 * */
 	#generateMap() {
 		this.isUpdating = true
@@ -48,6 +41,8 @@ export class Map {
 		this.#mapGenerator.placePaths();
 
 		this.isUpdating = false
+
+		return seed;
 	}
 
 	// NOTE: копия кода Linear Congruential Generator (LCG)
@@ -85,9 +80,6 @@ export class Map {
 				container.append(el);
 			}
 		}
-
-		// TODO: return seed
-		return 2140;
 	}
 
 	render() {
@@ -106,7 +98,5 @@ export class Map {
 				if (tile.type === Tile.types.empty) sum++;
 			}
 		}
-
-		// console.log(`Rendered as eempty ${sum} tiles!`);
 	}
 }

@@ -1,0 +1,38 @@
+export class SystemBase {
+	#componentType
+	#components = [];
+
+	get components() { return Object.freeze([...this.#components]); }
+
+	constructor(componentClass) {
+		this.#componentType = componentClass;
+	}
+
+	addComponent(component) {
+		if (!component instanceof this.#componentType)
+			return;
+
+		this.#components.push(component);
+	}
+
+	removeComponent(component) {
+		const idx = this.#components.indexOf(component);
+
+		if (idx > -1) {
+			this.#components.splice(idx, 1);
+		}
+	}
+
+	update() {
+		for (let i = 0; i < this.#components.length; i++) {
+			const item = this.#components[i];
+
+			if (!item instanceof this.#componentType) {
+				this.removeComponent(item);
+				continue;
+			}
+
+			item.update();
+		}
+	}
+}
