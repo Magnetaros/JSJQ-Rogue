@@ -20,6 +20,8 @@ export class Entity {
 	constructor(htmlElement) {
 		this.#id = Entity.#instanceCount++;
 		this.htmlElement = htmlElement;
+
+		console.log(`Created new entity ${this.id} with element ${htmlElement}`);
 	}
 
 	addComponent(component) {
@@ -54,16 +56,24 @@ export class Entity {
 }
 
 export class ComponentBase {
+	static #instanceCount = 0;
 	#entity;
+	#id;
 
 	get entity() { return this.#entity; }
+	get id() {
+		return this.#id;
+	}
 
 	constructor(entity) {
+		this.#id = ComponentBase.#instanceCount++;
 		this.#entity = entity;
 		this.#entity.addComponent(this);
+
+		console.log(`Component[${typeof this}](${this.id}) inside ${entity.id}`);
 	}
 
 	destroy() {
-
+		console.log("component base destroy");
 	}
 }

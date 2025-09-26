@@ -7,8 +7,10 @@ export class Map {
 	#mapWidth = 40;
 	#mapHeight = 24;
 	#mapGenerator;
+	#randomizer;
 
 	get map() { return this.#map; }
+	get randomizer() { return this.#randomizer; }
 
 	constructor() {
 		this.#map = [this.#mapWidth];
@@ -18,8 +20,6 @@ export class Map {
 				this.#map[i][j] = new Tile();
 			}
 		}
-
-		$(document).ready(this.redraw());
 	}
 
 	print() {
@@ -34,7 +34,7 @@ export class Map {
 	#generateMap() {
 		this.isUpdating = true
 		const seed = new Date().getTime();
-		const rand = this.#rundom(seed);
+		const rand = this.#randomizer = this.#rundom(seed);
 
 		this.#mapGenerator = new MazeGenerator(rand, this.#map);
 		this.#mapGenerator.createRooms(this.#mapGenerator.getRundomIntFrom(5, 10));
@@ -78,24 +78,6 @@ export class Map {
 				el.width(tileWidth);
 				el.height(tileHeight);
 				container.append(el);
-			}
-		}
-	}
-
-	render() {
-		const width = this.map.length;
-		const height = this.map[0].length;
-
-		let sum = 0;
-		for (let i = 0; i < width; i++) {
-			for (let j = 0; j < height; j++) {
-				const tile = this.map[i][j];
-				if (tile.element == null || tile.element == undefined) continue;
-
-				tile.element.removeClass();
-				tile.element.addClass(tile.type);
-
-				if (tile.type === Tile.types.empty) sum++;
 			}
 		}
 	}

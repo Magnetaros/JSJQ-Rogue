@@ -1,7 +1,8 @@
+
 import { ComponentBase } from "../Entity.js";
 
-export class Enemy extends ComponentBase {
-	#enemyCSSClass = "tileE";
+export class Potion extends ComponentBase {
+	#enemyCSSClass = "tileHP";
 
 	constructor(entity) {
 		super(entity);

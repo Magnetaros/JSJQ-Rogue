@@ -9,7 +9,7 @@ export class SystemBase {
 	}
 
 	addComponent(component) {
-		if (!component instanceof this.#componentType)
+		if (!component.constructor == this.#componentType.constructor)
 			return;
 
 		this.#components.push(component);
