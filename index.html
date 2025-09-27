@@ -22,11 +22,17 @@
 			<div class="inventory"></div>
 		</div>
 
+
+		<div class="cl"></div>
+		<h3 id="Input">tes</h3>
+
 		<script type="module">
 			import { Game } from "./index.js"
 
-			var game = new Game();
+			var game = new Game(document);
 			setInterval(game.Update.bind(game), 1000);
+			addEventListener("keyup", game.ReadInput.bind(game));
+			// interval -- reads input ~ 120 ms
 		</script>
 	</body>
 </html>

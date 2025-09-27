@@ -11,5 +11,8 @@ export class Point extends ComponentBase {
 	constructor(entity, startPos) {
 		super(entity);
 		this.#pos = startPos;
+		this.dir = [0, 0];
 	}
+
+
 }

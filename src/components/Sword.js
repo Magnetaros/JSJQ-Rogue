@@ -10,6 +10,9 @@ export class Sword extends ComponentBase {
 		this.entity.htmlElement.toggleClass(this.#enemyCSSClass, true);
 	}
 
+	onCollision(otherEntity) {
+	}
+
 	destroy() {
 		this.entity.htmlElement.toggleClass(this.#enemyCSSClass, false);
 	}

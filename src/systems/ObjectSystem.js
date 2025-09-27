@@ -5,4 +5,8 @@ export class ObjectSystem extends SystemBase {
 	constructor() {
 		super(typeof Entity);
 	}
+
+	update() {
+		console.log("Object system update");
+	}
 }

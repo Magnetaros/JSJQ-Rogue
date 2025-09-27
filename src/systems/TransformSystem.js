@@ -4,7 +4,6 @@ import { SystemBase } from "./SystemBase.js";
 
 export class TransformSystem extends SystemBase {
 	#logicMap;
-	#mapRef;
 
 	constructor() {
 		super(typeof Point);
@@ -14,14 +13,8 @@ export class TransformSystem extends SystemBase {
 		const width = map.length;
 		const height = map[0].length;
 
-		this.#mapRef = map;
 		this.#logicMap = Array.from({ length: width }, () => Array(height).fill(0));
 
-		// for (let i = 0; i < width; i++) {
-		// 	for (let j = 0; j < height; j++) {
-		// 		this.#logicMap[i][j] = map[i][j].type == Tile.types.wall ? 0 : 1;
-		// 	}
-		// }
 		this.#loopMap((i, j) => {
 			this.#logicMap[i][j] = (map[i][j].type === Tile.types.wall) ? 0 : 1;
 		});
@@ -48,5 +41,9 @@ export class TransformSystem extends SystemBase {
 				func(i, j);
 			}
 		}
+	}
+
+	update() {
+		console.log("Transform system  update");
 	}
 }

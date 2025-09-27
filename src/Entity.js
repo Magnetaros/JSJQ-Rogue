@@ -4,6 +4,7 @@ export class Entity {
 	static #instanceCount = 0;
 	#components = [];
 	#id;
+	#isDestroyed = false;
 
 	// readonly
 	get components() {
@@ -12,6 +13,10 @@ export class Entity {
 
 	get id() {
 		return this.#id;
+	}
+
+	get IsDestroyed() {
+		return this.#isDestroyed;
 	}
 
 	/*

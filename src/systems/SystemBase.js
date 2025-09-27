@@ -3,6 +3,7 @@ export class SystemBase {
 	#components = [];
 
 	get components() { return Object.freeze([...this.#components]); }
+	get componentType() { return this.#componentType; }
 
 	constructor(componentClass) {
 		this.#componentType = componentClass;
@@ -27,12 +28,10 @@ export class SystemBase {
 		for (let i = 0; i < this.#components.length; i++) {
 			const item = this.#components[i];
 
-			if (!item instanceof this.#componentType) {
+			if (!item.constructor == this.#componentType.constructor) {
 				this.removeComponent(item);
 				continue;
 			}
-
-			item.update();
 		}
 	}
 }

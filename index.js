@@ -7,6 +7,7 @@ import { Sword } from "./src/components/Sword.js";
 import { Entity } from "./src/Entity.js";
 import { Map } from "./src/Map.js"
 import { Singleton } from "./src/Singleton.js";
+import { CollisionSystem } from "./src/systems/CollisionSystem.js";
 import { DamageSystem } from "./src/systems/DamageSystem.js";
 import { ObjectSystem } from "./src/systems/ObjectSystem.js";
 import { SystemBase } from "./src/systems/SystemBase.js";
@@ -17,6 +18,7 @@ export class Game extends Singleton {
 	#systems = {
 		ObjectSystem: new ObjectSystem(),
 		DamageSystem: new DamageSystem(),
+		CollisionSystem: new CollisionSystem(),
 		TransformSystem: new TransformSystem(),
 	};
 
@@ -26,6 +28,8 @@ export class Game extends Singleton {
 		this.#map.print()
 
 		this.changeLevel();
+		this.inputDebug = $("#Input");
+		console.log(`Input eleement = ${this.inputDebug}`)
 	}
 
 	createEntity(pos) {
@@ -41,6 +45,15 @@ export class Game extends Singleton {
 		this.#systems.ObjectSystem.addComponent(entity);
 
 		return entity;
+	}
+
+	getPlayer() {
+		for (const entity of this.#systems.ObjectSystem.components) {
+			if (entity.components.some(item => item instanceof Player))
+				return entity;
+		}
+
+		return null;
 	}
 
 	changeLevel() {
@@ -84,12 +97,6 @@ export class Game extends Singleton {
 		this.#systems.TransformSystem.addComponent(new Point(player, [x, y]));
 		new Health(player, 10, 10);
 		new Player(player);
-
-		/*
-		 * TODO: 
-		 *  place/load player (1) ~
-		 *  place/load items (2 swords / 10 potion) ~
-		 * */
 	}
 
 	Update() {
@@ -97,11 +104,17 @@ export class Game extends Singleton {
 		// TODO: read input
 		// TODO: check for progress
 		// TODO: add player entity
+		//
 
-		this.#readInput();
+		for (const key in this.#systems)
+			this.#systems[key]?.update();
 	}
 
-	#readInput() {
+	ReadInput(event) {
+		console.log(event);
+		this.inputDebug.html(event.key);
 
+		const player = this.getPlayer();
+		console.log(`Got player object = ${player}`);
 	}
 }

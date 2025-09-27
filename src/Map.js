@@ -46,6 +46,7 @@ export class Map {
 	}
 
 	// NOTE: копия кода Linear Congruential Generator (LCG)
+	// TODO: найти другие вариации
 	#rundom(seed) {
 		let value = seed;
 		return function() {
@@ -54,7 +55,6 @@ export class Map {
 		};
 	}
 
-	// TODO: create Level instance and store it someware
 	redraw() {
 		this.#generateMap();
 
