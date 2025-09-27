@@ -7,6 +7,5 @@ export class ObjectSystem extends SystemBase {
 	}
 
 	update() {
-		console.log("Object system update");
 	}
 }

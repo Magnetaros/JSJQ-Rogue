@@ -1,3 +1,4 @@
+import { Game } from "../../index.js";
 import { Collider } from "../components/Collider.js";
 import { SystemBase } from "./SystemBase.js";
 
@@ -34,9 +35,9 @@ export class CollisionSystem extends SystemBase {
 	}
 
 	update() {
-		console.log("Collision system update");
-		for (let i = 0; i < this.#collisions.length; i++) {
+		const entities = Game.getInstance().systems.ObjectSystem.components;
+		const transformSystem = Game.getInstance().systems.TransformSystem;
 
-		}
+
 	}
 }

@@ -23,6 +23,10 @@ export class Health extends ComponentBase {
 
 	}
 
+	moveTo(htmlElement) {
+		htmlElement.append(this.#hpElement);
+	}
+
 	destroy() {
 
 	}

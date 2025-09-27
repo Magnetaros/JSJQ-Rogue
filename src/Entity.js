@@ -40,6 +40,15 @@ export class Entity {
 		return true;
 	}
 
+	getComponent(type) {
+		for (const component of this.#components) {
+			if (component instanceof type)
+				return component;
+		}
+
+		return null;
+	}
+
 	removeComponent(component) {
 		const idx = this.#components.indexOf(component);
 
