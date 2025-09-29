@@ -9,7 +9,7 @@ export class TransformSystem extends SystemBase {
 	get logicMap() { return this.#logicMap; }
 
 	constructor() {
-		super(typeof Transform);
+		super(Transform.name);
 	}
 
 	setMap(map) {
@@ -27,10 +27,14 @@ export class TransformSystem extends SystemBase {
 	isPointFree(pos) {
 		const [x, y] = pos;
 
+		if (x < 0 || x >= this.logicMap.length
+			|| y < 0 || y >= this.logicMap[0].length)
+			return false;
+
 		if (this.#logicMap[x][y] === 0)
 			return false;
 
-		for (const component of this.#logicMap) {
+		for (const component of this.components) {
 			const [cx, cy] = component.pos;
 			if (cx == x && cy == y)
 				return false;
@@ -52,7 +56,7 @@ export class TransformSystem extends SystemBase {
 	getEntityAtPoint(pos) {
 		const [x, y] = pos;
 
-		for (const component of this.#logicMap) {
+		for (const component of this.components) {
 			const [cx, cy] = component.pos;
 			if (cx == x && cy == y)
 				return component.entity;

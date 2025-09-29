@@ -11,7 +11,8 @@ export class Collider extends ComponentBase {
 	}
 
 	onCollision(otherEntity) {
-		for (const component of this.entity.cocmponents)
-			component?.onCollision(otherEntity);
+		for (const component of this.entity.components)
+			if (component != this && typeof component.onCollision == "function")
+				component.onCollision(otherEntity);
 	}
 }

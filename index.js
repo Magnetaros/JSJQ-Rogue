@@ -11,6 +11,7 @@ import { CollisionSystem } from "./src/systems/CollisionSystem.js";
 import { DamageSystem } from "./src/systems/DamageSystem.js";
 import { ObjectSystem } from "./src/systems/ObjectSystem.js";
 import { TransformSystem } from "./src/systems/TransformSystem.js";
+import { Collider } from "./src/components/Collider.js";
 
 export class Game extends Singleton {
 	#map;
@@ -72,6 +73,7 @@ export class Game extends Singleton {
 			this.#systems.TransformSystem.addComponent(new Transform(enemy, [x, y]));
 			new Health(enemy, 10, 10);
 			new Enemy(enemy);
+			this.#systems.CollisionSystem.addComponent(new Collider(enemy, [Player]));
 		}
 
 		const swords = freePoints.splice(0, 2);
@@ -96,6 +98,7 @@ export class Game extends Singleton {
 		this.#systems.TransformSystem.addComponent(new Transform(player, [x, y]));
 		new Health(player, 10, 10);
 		new Player(player);
+		this.#systems.CollisionSystem.addComponent(new Collider(player, [Enemy]));
 	}
 
 	Update() {

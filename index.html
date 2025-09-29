@@ -25,7 +25,7 @@
 			import { Game } from "./index.js"
 
 			var game = new Game(document);
-			setInterval(game.Update.bind(game), 1000);
+			setInterval(game.Update.bind(game), 300);
 			addEventListener("keyup", game.ReadInput.bind(game));
 			// interval -- reads input ~ 120 ms
 		</script>
