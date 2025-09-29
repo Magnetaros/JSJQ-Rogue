@@ -12,6 +12,12 @@ export class TransformSystem extends SystemBase {
 		super(Transform.name);
 	}
 
+	isOutOfBounds(pos) {
+		const [x, y] = pos;
+		return x < 0 || x >= this.logicMap.length
+			|| y < 0 || y >= this.logicMap[0].length;
+	}
+
 	setMap(map) {
 		this.#mapRef = map;
 		const width = map.length;
@@ -27,8 +33,7 @@ export class TransformSystem extends SystemBase {
 	isPointFree(pos) {
 		const [x, y] = pos;
 
-		if (x < 0 || x >= this.logicMap.length
-			|| y < 0 || y >= this.logicMap[0].length)
+		if (this.isOutOfBounds(pos))
 			return false;
 
 		if (this.#logicMap[x][y] === 0)
@@ -44,6 +49,9 @@ export class TransformSystem extends SystemBase {
 	}
 
 	setDefaultAtPos(pos) {
+		if (this.isOutOfBounds(pos))
+			return;
+
 		const [x, y] = pos;
 		const id = x * this.#logicMap.length + y;
 
@@ -54,7 +62,14 @@ export class TransformSystem extends SystemBase {
 	}
 
 	getEntityAtPoint(pos) {
+		if (this.isOutOfBounds(pos))
+			return null;
+
 		const [x, y] = pos;
+
+		if (x < 0 || x >= this.logicMap.length
+			|| y < 0 || y >= this.logicMap[0].length)
+			return false;
 
 		for (const component of this.components) {
 			const [cx, cy] = component.pos;
