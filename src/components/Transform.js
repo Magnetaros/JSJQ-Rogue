@@ -8,7 +8,6 @@ export class Transform extends ComponentBase {
 
 	get pos() { return this.#pos; }
 	set pos(val) {
-		console.log(val, this.#pos);
 		this.#pos = val;
 	}
 
@@ -34,7 +33,6 @@ export class Transform extends ComponentBase {
 				component?.moveTo(htmlElement);
 		}
 
-		console.log("moving to", htmlElement);
 		this.entity.htmlElement = htmlElement;
 	}
 }

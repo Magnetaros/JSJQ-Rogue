@@ -94,12 +94,10 @@ export class TransformSystem extends SystemBase {
 			const [dx, dy] = component.move();
 
 			if (x == dx && y == dy) continue;
-			console.log([x, y], [dx, dy]);
 
 			let htmlId = dx * this.#logicMap.length + dy;
 			const element = $(`#${htmlId}`);
 
-			console.log(component.entity.htmlElement, element, [dx, dy], component);
 			if (component.entity.htmlElement != element)
 				component.moveTo(element);
 
