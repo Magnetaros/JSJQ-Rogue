@@ -7,5 +7,8 @@ export class ObjectSystem extends SystemBase {
 	}
 
 	update() {
+		for (let i = 0; i < this.components.length; i++) {
+			const entity = this.components[i];
+		}
 	}
 }

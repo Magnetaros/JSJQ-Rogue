@@ -65,6 +65,7 @@ export class Entity {
 			this.removeComponent(this.#components[i]);
 		}
 
+		this.#isDestroyed = true;
 		ObjectSystem.removeComponent(this);
 	}
 }

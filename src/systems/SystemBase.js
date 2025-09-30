@@ -1,3 +1,4 @@
+// TODO: mb remove this class 
 export class SystemBase {
 	#componentType
 	#components = [];
@@ -28,9 +29,8 @@ export class SystemBase {
 		for (let i = 0; i < this.#components.length; i++) {
 			const item = this.#components[i];
 
-			if (!item.constructor == this.#componentType.constructor) {
+			if (item.constructor != this.#componentType.constructor) {
 				this.removeComponent(item);
-				continue;
 			}
 		}
 	}
