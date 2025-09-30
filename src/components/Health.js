@@ -20,7 +20,12 @@ export class Health extends ComponentBase {
 	}
 
 	applyDamage(damage) {
+		const ui = this.#hpElement;
+		if (ui == null || ui == undefined) return;
 
+		this.#current -= damage;
+		const percent = (this.#current / this.#maxHP) * 100;
+		ui.css("width", `${percent}%`);
 	}
 
 	moveTo(htmlElement) {

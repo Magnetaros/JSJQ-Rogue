@@ -1,5 +1,6 @@
 import { Game } from "../../index.js";
 import { ComponentBase } from "../Entity.js";
+import { Damage } from "./Damage.js";
 import { Transform } from "./Transform.js";
 
 export class Player extends ComponentBase {
@@ -24,5 +25,26 @@ export class Player extends ComponentBase {
 
 	destroy() {
 		this.entity.htmlElement.toggleClass(this.#playerCSSClass, false);
+	}
+
+	attack() {
+		const gameInstance = Game.getInstance();
+
+		const [x, y] = this.entity.getComponent(Transform).pos;
+		console.log({
+			title: "attacking",
+			playerPos: [x, y]
+		});
+		for (let i = -1; i < 2; i++) {
+			for (let j = -1; j < 2; j++) {
+				if (i == 0 && j == 0)
+					continue;
+
+				const pos = [x + i, y + j];
+				const damage = 2;
+
+				gameInstance.systems.DamageSystem.addComponent(new Damage(pos, damage));
+			}
+		}
 	}
 }

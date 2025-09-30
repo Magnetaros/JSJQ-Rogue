@@ -17,9 +17,9 @@ export class Game extends Singleton {
 	#map;
 	#systems = {
 		ObjectSystem: new ObjectSystem(),
-		DamageSystem: new DamageSystem(),
-		CollisionSystem: new CollisionSystem(), // gets Point and checks before transform system/ if can't pass set dir to [0, 0]
+		CollisionSystem: new CollisionSystem(),
 		TransformSystem: new TransformSystem(),
+		DamageSystem: new DamageSystem(),
 	};
 
 	get systems() { return this.#systems; }
@@ -109,12 +109,13 @@ export class Game extends Singleton {
 	}
 
 	ReadInput(event) {
+		console.log(event);
 		const player = this.getPlayer();
 		const transform = player.getComponent(Transform);
 		console.log(`Got player object = ${player}`);
 
 		let [x, y] = [0, 0];
-		let attack = null;
+		let attack = false;
 		switch (event.code) {
 			case 'KeyW':
 				y = -1;
@@ -126,10 +127,11 @@ export class Game extends Singleton {
 				y = 1;
 				break;
 			case 'KeyD':
+				console.log("moving right")
 				x = 1;
 				break;
 			case 'Space':
-				attack = transform.move();
+				attack = true;
 				break;
 		}
 
@@ -138,8 +140,8 @@ export class Game extends Singleton {
 		if (transform != null && (x != dx || y != dy))
 			transform.dir = [x, y];
 
-		if (attack != null) {
-
+		if (attack) {
+			player.getComponent(Player).attack();
 		}
 	}
 }
